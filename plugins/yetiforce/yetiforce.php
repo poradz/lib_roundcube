@@ -13,10 +13,12 @@ class yetiforce extends rcube_plugin
 	private $currentUser;
 	private $viewData = [];
 	/**
+	 * Message object
 	 * @var array
 	 */
 	private $message = [];
 	/**
+	 * Ics files array of objects
 	 * @var array
 	 */
 	private $icsParts = [];
@@ -789,7 +791,7 @@ if (window && window.rcmail) {
 	/**
 	 * Check if $part is ics.
 	 *
-	 * @param $part
+	 * @param array $part
 	 *
 	 * @return bool
 	 */
