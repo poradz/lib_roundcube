@@ -727,17 +727,21 @@ if (window && window.rcmail) {
 		$showPart = [];
 		$translationMod = 'Calendar';
 		$showMore = false;
+		$current_user = \Users_Privileges_Model::getCurrentUserPrivilegesModel();
+		$timeZone = is_object($current_user) ? $current_user->time_zone : \App\Config::main('default_timezone');
 		foreach ($ics as $data) {
 			$evTemplate = '<div class="c-ical">';
 			[$record, $icsPart] = $data;
 			$fields = '';
 			if (!$record->isEmpty('date_start')) {
-				$dateStart = $record->getDisplayValue('date_start');
+				$dateStart = \DateTimeField::convertTimeZone($record->get('date_start') . $record->get('time_start'), 'GMT', $timeZone);
+				$dateStart = (new \DateTimeField($dateStart->format('Y-m-d H:i:s')))->getDisplayDateTimeValue();
 				$dateStartLabel = \App\Language::translate('LBL_START');
 				$fields .= "<div><span class=\"fas fa-clock mr-1\"></span><strong>$dateStartLabel</strong>: $dateStart</div>";
 			}
 			if (!$record->isEmpty('due_date')) {
-				$dueDate = $record->getDisplayValue('due_date');
+				$dueDate = \DateTimeField::convertTimeZone($record->get('due_date') . $record->get('time_end'), 'GMT', $timeZone);
+				$dueDate = (new \DateTimeField($dueDate->format('Y-m-d H:i:s')))->getDisplayDateTimeValue();
 				$dueDateLabel = \App\Language::translate('LBL_END');
 				$fields .= "<div><span class=\"fas fa-clock mr-1\"></span><strong>$dueDateLabel</strong>: $dueDate</div>";
 			}
